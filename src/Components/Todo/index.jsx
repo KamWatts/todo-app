@@ -1,11 +1,11 @@
 import React, { useEffect, useState, createContext } from 'react';
 import useForm from '../../hooks/form';
 import { v4 as uuid } from 'uuid';
-import List from './List';
-import Pagination from 'mantine/lib/Pagination/Pagination';
+import List from '../List';
+import Pagination from 'mantine/lib/Pagination';
+import DisplaySettingsContext from '../../Contex/Settings';
 
-// Create context for managing application display settings
-export const DisplayContext = createContext();
+export const DisplayContext = createContext(DisplaySettingsContext);
 
 const Todo = () => {
   const [displaySettings, setDisplaySettings] = useState({
@@ -23,10 +23,10 @@ const Todo = () => {
     setList([...list, item]);
   }
 
-  function deleteItem(id) {
-    const items = list.filter(item => item.id !== id);
-    setList(items);
-  }
+  // function deleteItem(id) {
+  //   const items = list.filter(item => item.id !== id);
+  //   setList(items);
+  // }
 
   function toggleComplete(id) {
     const items = list.map(item => {
