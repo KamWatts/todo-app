@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { DisplaySettingsContext } from './DisplaySettingsContext';
+import { DisplaySettingsContext } from '../../Contex/Settings';
 import { Pagination } from '@mantine/core';
 
 function List(props) {
