@@ -1,8 +1,9 @@
-import React, { useEffect, useState, createContext } from "react";
-import useForm from "../../hooks/form";
+import React, { useState, createContext } from "react";
 import { v4 as uuid } from "uuid";
 import List from "../List";
-import { Pagination } from "@mantine/core";
+import { TextInput, Button, Group, Box } from "@mantine/core";
+import { randomId } from '@mantine/hooks'
+import { useForm } from '@mantine/form'
 import DisplaySettingsContext from "../../Contex/Settings";
 
 export const DisplayContext = createContext(DisplaySettingsContext);
@@ -23,11 +24,6 @@ const Todo = () => {
     setList([...list, item]);
   }
 
-  // function deleteItem(id) {
-  //   const items = list.filter(item => item.id !== id);
-  //   setList(items);
-  // }
-
   function toggleComplete(id) {
     const items = list.map((item) => {
       if (item.id === id) {
@@ -38,61 +34,40 @@ const Todo = () => {
     setList(items);
   }
 
-  useEffect(() => {
-    let incompleteCount = list.filter((item) => !item.complete).length;
-    setIncomplete(incompleteCount);
-    document.title = `To Do List: ${incomplete}`;
-  }, [list]);
+  const form = useForm({
+    initialValues: {
+      AddItem: '',
+      Assigned: '',
+    },
+  });
 
   return (
-    <DisplayContext.Provider value={{ displaySettings, setDisplaySettings }}>
+    <>
       <header data-testid="todo-header">
         <h1 data-testid="todo-h1">To Do List: {incomplete} items pending</h1>
       </header>
+      <Box maxWidth={320} mx="auto">
+        <TextInput label="Add Item" placeholder="Type item here" {...form.getInputProps('AddItem')} />
+        <TextInput mt="md" label="Assigned to" placeholder="Type your name here" {...form.getInputProps('Assigned')} />
 
-      <form onSubmit={handleSubmit}>
-        <h2>Add To Do Item</h2>
-        <label>
-          <span>To Do Item</span>
-          <input
-            onChange={handleChange}
-            name="text"
-            type="text"
-            placeholder="Item Details"
-          />
-        </label>
-        <label>
-          <span>Assigned To</span>
-          <input
-            onChange={handleChange}
-            name="assignee"
-            type="text"
-            placeholder="Assignee Name"
-          />
-        </label>
-        <label>
-          <span>Difficulty</span>
-          <input
-            onChange={handleChange}
-            defaultValue={displaySettings.difficulty}
-            type="range"
-            min={1}
-            max={5}
-            name="difficulty"
-          />
-        </label>
-        <label>
-          <button type="submit">Add Item</button>
-        </label>
-      </form>
-
-      <List items={list} toggleComplete={toggleComplete} />
-
-      <Pagination
-        maxPages={Math.ceil(list.length / displaySettings.maxItemsPerPage)}
-        onChange={() => {}}
-      />
-    </DisplayContext.Provider>
+        <Group position="center" mt="xl">
+          <Button
+            variant="outline"
+            onClick={() =>
+              form.setValues({
+                AddItem: handleSubmit,
+                Assigned: `${randomId()}@test.com`,
+              })
+            }
+          >
+            Add Item
+          </Button>
+        </Group>
+      </Box>
+      
+        <List items={list} toggleComplete={toggleComplete} />
+    
+    </>
   );
 };
 

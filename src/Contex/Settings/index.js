@@ -9,7 +9,7 @@ export const DisplaySettingsProvider = ({ children }) => {
   const [displaySettings, setDisplaySettings] = useState({
     numItemsToShow: 3,
     hideCompletedItems: true,
-    sortDifficulty: 'easy',
+    sortDifficulty: ('easy', 'hard', 'advanced'),
   });
 
 
