@@ -1,7 +1,9 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { Pagination } from "@mantine/core";
+// import { Pagination } from "@mantine/core";
 import { DisplaySettingsContext } from "./DisplaySettingsContext";
+import { List, ListItem } from ''
+
 
 function TodoList(props) {
   console.log("Inside TodoList ", props);
@@ -23,7 +25,7 @@ function TodoList(props) {
 
   return (
     <>
-      <List>
+      <List position='center'>
         {displayedItems.map((item) => (
           <ListItem
             key={item.id}
@@ -33,11 +35,11 @@ function TodoList(props) {
           </ListItem>
         ))}
       </List>
-      <Pagination
+      {/* <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
-      />
+      /> */}
     </>
   );
 }

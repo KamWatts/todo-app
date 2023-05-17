@@ -1,9 +1,8 @@
 import React, { useContext, useState } from "react";
 import { DisplaySettingsContext } from "../../Contex/Settings";
-import { Pagination } from "@mantine/core";
+import { Pagination, Box } from "@mantine/core";
 
 function List(props) {
-  console.log("Inside the list ", props);
   const { items } = props;
   const [currentPage, setCurrentPage] = useState(0);
   const displaySettings = useContext(DisplaySettingsContext);
@@ -19,23 +18,25 @@ function List(props) {
   };
 
   return (
-    <>
-      <ul>
+    <Box mx="auto" maxWidth={320}>
+      <ul style={{ listStyleType: "none" }}>
         {displayedItems.map((item, index) => (
           <li key={index}>{item}</li>
         ))}
       </ul>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-        size="md"
-        withGoToLabel="true"
-        variant="outline"
-        maxButtons={10}
-        limit={displaySettings.numItemsPerPage}
-      />
-    </>
+      <Box display="flex" justifyContent="center">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          size="md"
+          withGoToLabel
+          variant="outline"
+          maxButtons={10}
+          limit={displaySettings.numItemsPerPage}
+        />
+      </Box>
+    </Box>
   );
 }
 
