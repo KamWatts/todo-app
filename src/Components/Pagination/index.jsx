@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import { List, ListItem, Pagination } from '@mantine/core';
-import { DisplaySettingsContext } from './DisplaySettingsContext';
+import React, { useContext, useState } from "react";
+import PropTypes from "prop-types";
+import { Pagination } from "@mantine/core";
+import { DisplaySettingsContext } from "./DisplaySettingsContext";
 
 function TodoList(props) {
+  console.log("Inside TodoList ", props);
   const { items } = props;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -24,12 +25,19 @@ function TodoList(props) {
     <>
       <List>
         {displayedItems.map((item) => (
-          <ListItem key={item.id} style={{ textDecoration: item.completed ? 'line-through' : 'none' }}>
+          <ListItem
+            key={item.id}
+            style={{ textDecoration: item.completed ? "line-through" : "none" }}
+          >
             {item.text}
           </ListItem>
         ))}
       </List>
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </>
   );
 }

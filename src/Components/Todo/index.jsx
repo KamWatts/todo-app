@@ -1,9 +1,9 @@
-import React, { useEffect, useState, createContext } from 'react';
-import useForm from '../../hooks/form';
-import { v4 as uuid } from 'uuid';
-import List from '../List';
-import Pagination from 'mantine/lib/Pagination';
-import DisplaySettingsContext from '../../Contex/Settings';
+import React, { useEffect, useState, createContext } from "react";
+import useForm from "../../hooks/form";
+import { v4 as uuid } from "uuid";
+import List from "../List";
+import { Pagination } from "@mantine/core";
+import DisplaySettingsContext from "../../Contex/Settings";
 
 export const DisplayContext = createContext(DisplaySettingsContext);
 
@@ -11,7 +11,7 @@ const Todo = () => {
   const [displaySettings, setDisplaySettings] = useState({
     maxItemsPerPage: 3,
     hideCompletedItems: true,
-    sortDifficulty: 'easy',
+    sortDifficulty: "easy",
   });
   const [list, setList] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
@@ -29,7 +29,7 @@ const Todo = () => {
   // }
 
   function toggleComplete(id) {
-    const items = list.map(item => {
+    const items = list.map((item) => {
       if (item.id === id) {
         item.complete = !item.complete;
       }
@@ -39,7 +39,7 @@ const Todo = () => {
   }
 
   useEffect(() => {
-    let incompleteCount = list.filter(item => !item.complete).length;
+    let incompleteCount = list.filter((item) => !item.complete).length;
     setIncomplete(incompleteCount);
     document.title = `To Do List: ${incomplete}`;
   }, [list]);
@@ -86,7 +86,7 @@ const Todo = () => {
         </label>
       </form>
 
-      <List list={list} toggleComplete={toggleComplete} />
+      <List items={list} toggleComplete={toggleComplete} />
 
       <Pagination
         maxPages={Math.ceil(list.length / displaySettings.maxItemsPerPage)}
