@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { DisplaySettingsContext } from '../../Contex/Settings';
-import { Pagination } from '@mantine/core';
+import React, { useContext, useState } from "react";
+import { DisplaySettingsContext } from "../../Contex/Settings";
+import { Pagination } from "@mantine/core";
 
 function List(props) {
+  console.log("Inside the list ", props);
   const { items } = props;
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const displaySettings = useContext(DisplaySettingsContext);
 
   const startIndex = (currentPage - 1) * displaySettings.numItemsPerPage;
