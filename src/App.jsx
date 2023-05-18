@@ -1,13 +1,18 @@
 import React from 'react';
 import Todo from './Components/Todo';
 import DisplaySettingsProvider from './Contex/Settings';
+import AuthProvider from '../src/auth'
+import { MantineProvider } from '@mantine/core';
 
-export default class App extends React.Component {
-  render() {
+export function App()  {
+
     return (
-      <DisplaySettingsProvider>
-        <Todo />
-      </DisplaySettingsProvider>
+      <AuthProvider>
+        <MantineProvider>
+          <DisplaySettingsProvider>
+              <Todo />
+          </DisplaySettingsProvider>
+        </MantineProvider>
+      </AuthProvider>
     );
   }
-}
