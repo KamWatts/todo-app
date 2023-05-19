@@ -4,7 +4,7 @@ import React, { createContext, useState } from 'react';
 export const DisplaySettingsContext = createContext();
 
 
-export const DisplaySettingsProvider = ({ children }) => {
+const DisplaySettingsProvider = ({ children }) => {
 
   const [displaySettings, setDisplaySettings] = useState({
     numItemsToShow: 3,

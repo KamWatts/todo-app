@@ -1,18 +1,21 @@
 import React from 'react';
 import Todo from './Components/Todo';
-import DisplaySettingsProvider from './Contex/Settings';
-import AuthProvider from '../src/auth'
+import DisplaySettingsContext from './Contex/Settings';
+import AuthProvider from '../src/auth';
 import { MantineProvider } from '@mantine/core';
 
-export function App()  {
+function App() {
+  return (
+    <AuthProvider>
+      <MantineProvider>
+        <DisplaySettingsContext.Consumer>
+          {displaySettings => (
+            <Todo displaySettings={displaySettings} />
+          )}
+        </DisplaySettingsContext.Consumer>
+      </MantineProvider>
+    </AuthProvider>
+  );
+}
 
-    return (
-      <AuthProvider>
-        <MantineProvider>
-          <DisplaySettingsProvider>
-              <Todo />
-          </DisplaySettingsProvider>
-        </MantineProvider>
-      </AuthProvider>
-    );
-  }
+export default App;

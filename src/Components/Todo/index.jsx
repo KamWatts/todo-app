@@ -1,10 +1,11 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import { v4 as uuid } from "uuid";
 import List from "../List";
 import { TextInput, Button, Group, Box } from "@mantine/core";
 import { randomId } from '@mantine/hooks'
 import { useForm } from '@mantine/form'
 import DisplaySettingsContext from "../../Contex/Settings";
+import axios from "axios";
 
 export const DisplayContext = createContext(DisplaySettingsContext);
 
@@ -18,20 +19,54 @@ const Todo = () => {
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useForm(addItem);
 
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  function fetchItems() {
+    axios.get("'https://api-js401.herokuapp.com/signup'")
+      .then(response => {
+        setList(response.data);
+        const incompleteItems = response.data.filter(item => !item.complete);
+        setIncomplete(incompleteItems.length);
+      })
+      .catch(error => {
+        console.error("Error fetching items:", error);
+      });
+  }
+
   function addItem(item) {
-    item.id = uuid();
-    item.complete = false;
-    setList([...list, item]);
+    axios.post("'https://api-js401.herokuapp.com/signup'", item)
+      .then(response => {
+        setList([...list, response.data]);
+        setIncomplete(incomplete + 1);
+      })
+      .catch(error => {
+        console.error("Error adding item:", error);
+      });
   }
 
   function toggleComplete(id) {
-    const items = list.map((item) => {
-      if (item.id === id) {
-        item.complete = !item.complete;
-      }
-      return item;
-    });
-    setList(items);
+    const item = list.find(item => item.id === id);
+    const updatedItem = { ...item, complete: !item.complete };
+  
+    axios.put(`/api/items/${id}`, updatedItem)
+      .then(response => {
+        const updatedList = list.map(item => {
+          if (item.id === id) {
+            return response.data;
+          }
+          return item;
+        });
+  
+        setList(updatedList);
+  
+        const incompleteItems = updatedList.filter(item => !item.complete);
+        setIncomplete(incompleteItems.length);
+      })
+      .catch(error => {
+        console.error("Error toggling item completeness:", error);
+      });
   }
 
   const form = useForm({

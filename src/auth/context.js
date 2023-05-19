@@ -1,37 +1,11 @@
 import React, { useEffect, useState } from "react";
 import cookie from "react-cookies";
 import jwt_decode from "jwt-decode";
-
-const testUsers = {
-  Admininistrator: {
-    password: "admin",
-    name: "Administrator",
-    token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW5pc3RyYXRvciIsInJvbGUiOiJhZG1pbiIsImNhcGFiaWxpdGllcyI6IlsnY3JlYXRlJywncmVhZCcsJ3VwZGF0ZScsJ2RlbGV0ZSddIiwiaWF0IjoxNTE2MjM5MDIyfQ.pAZXAlTmC8fPELk2xHEaP1mUhR8egg9TH5rCyqZhZkQ",
-  },
-  Editor: {
-    password: "editor",
-    name: "Editor",
-    token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRWRpdG9yIiwicm9sZSI6ImVkaXRvciIsImNhcGFiaWxpdGllcyI6IlsncmVhZCcsJ3VwZGF0ZSddIiwiaWF0IjoxNTE2MjM5MDIyfQ.3aDn3e2pf_J_1rZig8wj9RiT47Ae2Lw-AM-Nw4Tmy_s",
-  },
-  Writer: {
-    password: "writer",
-    name: "Writer",
-    token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiV3JpdGVyIiwicm9sZSI6IndyaXRlciIsImNhcGFiaWxpdGllcyI6IlsnY3JlYXRlJ10iLCJpYXQiOjE1MTYyMzkwMjJ9.dmKh8m18mgQCCJp2xoh73HSOWprdwID32hZsXogLZ68",
-  },
-  User: {
-    password: "user",
-    name: "User",
-    token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVXNlciIsInJvbGUiOiJ1c2VyIiwiY2FwYWJpbGl0aWVzIjoiWydyZWFkJ10iLCJpYXQiOjE1MTYyMzkwMjJ9.WXYvIKLdPz_Mm0XDYSOJo298ftuBqqjTzbRvCpxa9Go",
-  },
-};
+import axios from "axios";
 
 export const LoginContext = React.createContext();
 
-const LoginProvider = ({children}) => {
+const LoginProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState({ capabilities: [] });
@@ -42,18 +16,17 @@ const LoginProvider = ({children}) => {
   };
 
   const login = async (username, password) => {
-    let auth = testUsers[username];
-
-    if (auth && auth.password === password) {
-      try {
-        validateToken(auth.token);
-      } catch (e) {
-        setLoggedIn(false);
-        setToken(null);
-        setUser({});
-        setError(e);
-        console.error(e);
-      }
+    try {
+      const response = await axios.post('https://api-js401.herokuapp.com/signup', { username, password });
+      const authToken = response.data.token;
+      validateToken(authToken);
+      setError(null);
+    } catch (error) {
+      setLoggedIn(false);
+      setToken(null);
+      setUser({});
+      setError(error.message);
+      console.error("Login Error:", error);
     }
   };
 
@@ -69,12 +42,13 @@ const LoginProvider = ({children}) => {
       setLoggedIn(true);
       setToken(token);
       setUser(validUser);
-    } catch (e) {
+      cookie.save("auth", token, { path: "/" }); // Save token in a cookie
+    } catch (error) {
       setLoggedIn(false);
       setToken(null);
       setUser({});
-      setError(e);
-      console.log("Token Validation Error", e);
+      setError(error.message);
+      console.log("Token Validation Error:", error);
     }
   };
 
