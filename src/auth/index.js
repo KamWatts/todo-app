@@ -2,6 +2,7 @@ import React from 'react';
 import Auth from './auth';
 import Login from './login.js';
 import LoginContext from './context.js';
+// import LoginProvider from './context.js';
 
 function App() {
   return (
