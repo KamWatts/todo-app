@@ -1,5 +1,3 @@
-/** @format */
-
 import React, { useEffect, useState } from "react";
 import cookie from "react-cookies";
 import jwt_decode from "jwt-decode";
